@@ -27,7 +27,7 @@ public class PreguntaMapper extends AbstractMapper<Pregunta,Integer>{
 	@Override
 	protected String getKeyColumnName() {
 		
-		return "questionId";
+		return "id";
 	}
 
 	@Override

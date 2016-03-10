@@ -72,6 +72,7 @@ public class DataAccessor {
 	 */
 	public boolean insertRow(String tableName, String[] fields, Object[] values) {
 		String sql = generateInsertStatement(tableName, fields);
+		System.out.println(sql);
 		try (Connection con = ds.getConnection(); PreparedStatement pst = con.prepareStatement(sql)) {
 			for (int i = 0; i < values.length; i++) {
 				pst.setObject(i + 1, values[i]);
