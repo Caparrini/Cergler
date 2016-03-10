@@ -20,6 +20,7 @@ public class DataAccessor {
 	public boolean deleteRow(String tableName, String keyColumnNames,
 			Object[] KeyValues) {
 		String sql = generateDeleteStatement(tableName, keyColumnNames);
+		System.out.println(sql);
 		try(Connection con = ds.getConnection();
 				PreparedStatement pst = con.prepareStatement(sql)) {
 				for (int i = 0; i < KeyValues.length; i++) {
@@ -95,14 +96,16 @@ public class DataAccessor {
 	
 	private String generateUpdateStatement(String tableName,
 			String keyColumnNames, String[] columnNames) {
-		// TODO Auto-generated method stub
-		return null;
+		String setList = String.join(" = ? AND", columnNames);
+		String[] marks = new String[1];
+		Arrays.fill(marks, "?");
+		String markList = String.join(" = ",keyColumnNames);
+		return "UPDATE " + tableName + " SET " + setList + " WHERE " + markList;
 	}
 	
 	private String generateDeleteStatement(String tableName,
 			String keyColumnNames) {
-		// TODO Auto-generated method stub
-		return null;
+		return "DELETE FROM " + tableName + " WHERE " + keyColumnNames + " = ?";
 	}
 
 }

@@ -32,6 +32,8 @@ public class ConnectionTest {
 		Object[] values = new Object[] {1,"¿Te gusta el pimiento?"};
 		System.out.println(values);
 		pm.insert(values);
+		Integer[] key = new Integer[] {1};
+		pm.delete(key);
 	
 
 		// Recuperación de un correo de la tabla tiene_correo
