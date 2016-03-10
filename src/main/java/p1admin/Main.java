@@ -31,9 +31,10 @@ public class Main {
 		try {
 			Connection con = ds.getConnection();
 
-		
 			// TODO Cambiar inicialización de fachada a BD añadiendo
 			// los parámetros que sean necesarios
+			
+			
 			GenericDBFacade<Pregunta, Opcion> facade = new FauxDBFacade();
 		
 			DefaultListModel<Pregunta> model = new DefaultListModel<>();
@@ -41,6 +42,7 @@ public class Main {
 			AllQuestionsEditor ed = new AllQuestionsEditor(model, controller);
 			ed.setModal(true);
 			ed.setVisible(true);
+			
 		
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
