@@ -42,4 +42,10 @@ public class PreguntaMapper extends AbstractMapper<Pregunta,Integer>{
 		return null;
 	}
 
+	@Override
+	public boolean insert(Pregunta obInsert) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

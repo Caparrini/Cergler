@@ -11,7 +11,7 @@ import javax.sql.DataSource;
 
 
 public abstract class AbstractMapper<T,K> {
-	//Insercción,modificación y borrado
+	
 	protected DataSource ds;
 
 	public AbstractMapper(DataSource ds) {
@@ -34,6 +34,10 @@ public abstract class AbstractMapper<T,K> {
 	 */
 	protected abstract String getKeyColumnName();
 
+	 /**
+	  * Inserta un objeto en la base de datos (depende del mapper concreto.	
+	  */
+	public abstract boolean insert(T obInsert);
 	/**
 	 * Construye un objeto mapeado a partir del ResultSet pasado como parámetro.
 	 * Esta función es la que establece la correspondencia desde el mundo
@@ -75,10 +79,14 @@ public abstract class AbstractMapper<T,K> {
 		 return da.deleteRow(getTableName(), getKeyColumnName(), id); 
 	 }
 	 
-	 //INSERTA UNA FILA EN LA TABLA CORRESPONDIENTE DE LA BASE DE DATOS	
-	public boolean insert(Object[] values){
-	    DataAccessor da = new DataAccessor(ds);
-		return da.insertRow(getTableName(), getColumnNames(), values);
-	}
+	/**
+	 * Inserción general
+	 * @param id
+	 * @return
+	 */
+	 public boolean insert(Object[] values){
+		 DataAccessor da = new DataAccessor(ds);
+		 return da.insertRow(getTableName(), new String[] {getKeyColumnName()}, values); 
+	 }
 	
 }

@@ -31,13 +31,13 @@ public class ConnectionTest {
 		PreguntaMapper pm = new PreguntaMapper(ds);
 		Object[] values = new Object[] {5,"¿Te gusta el pimiento?"};
 		//System.out.println(values);
-		//pm.insert(values);
+		pm.insert(values);
 		Integer ki = 6;
-		Integer[] key = new Integer[] {1};
+		Integer[] key = new Integer[] {5};
 		Object[] valuesUpdate = new Object[] {ki,"¿Nueva pregunta?"};
 		//pm.delete(key);
-		pm.update(values, key);
-		//pm.update(valuesUpdate, key);
+		//pm.update(values, key);
+		pm.update(valuesUpdate, key);
 	
 
 		// Recuperación de un correo de la tabla tiene_correo
