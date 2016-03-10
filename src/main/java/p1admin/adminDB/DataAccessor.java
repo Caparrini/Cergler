@@ -41,6 +41,7 @@ public class DataAccessor {
 			Object[] columnValues) {
 		
 		String sql = generateUpdateStatement(tableName, keyColumnName,columnNames);
+		System.out.println(sql);
 		try(Connection con = ds.getConnection();
 				PreparedStatement pst = con.prepareStatement(sql)) {
 				for (int i = 0; i < columnValues.length; i++) {
@@ -96,11 +97,11 @@ public class DataAccessor {
 	
 	private String generateUpdateStatement(String tableName,
 			String keyColumnNames, String[] columnNames) {
-		String setList = String.join(" = ? AND", columnNames);
+		String setList = String.join(" = ? AND ", columnNames);
 		String[] marks = new String[1];
 		Arrays.fill(marks, "?");
 		String markList = String.join(" = ",keyColumnNames);
-		return "UPDATE " + tableName + " SET " + setList + " WHERE " + markList;
+		return "UPDATE " + tableName + " SET " + setList + " = ?"  + " WHERE " + markList + " = ?";
 	}
 	
 	private String generateDeleteStatement(String tableName,

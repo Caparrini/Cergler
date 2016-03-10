@@ -64,7 +64,7 @@ public abstract class AbstractMapper<T,K> {
 	//Update database , uses DataAccesor
 	public boolean update(Object[] columnValues, Object[] keyValues){
 		DataAccessor da = new DataAccessor(ds);
-		return da.updateRows(getTableName(),getKeyColumnName(),keyValues, getColumnNames(),columnValues);	
+		return da.updateRows(getTableName(),getKeyColumnName(),keyValues, getColumnNames(),columnValues);
 	}
 	
 

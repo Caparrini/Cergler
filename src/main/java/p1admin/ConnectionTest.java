@@ -29,11 +29,15 @@ public class ConnectionTest {
 		// Recuperación de un contacto
 
 		PreguntaMapper pm = new PreguntaMapper(ds);
-		Object[] values = new Object[] {1,"¿Te gusta el pimiento?"};
-		System.out.println(values);
-		pm.insert(values);
+		Object[] values = new Object[] {5,"¿Te gusta el pimiento?"};
+		//System.out.println(values);
+		//pm.insert(values);
+		Integer ki = 6;
 		Integer[] key = new Integer[] {1};
-		pm.delete(key);
+		Object[] valuesUpdate = new Object[] {ki,"¿Nueva pregunta?"};
+		//pm.delete(key);
+		pm.update(values, key);
+		//pm.update(valuesUpdate, key);
 	
 
 		// Recuperación de un correo de la tabla tiene_correo
