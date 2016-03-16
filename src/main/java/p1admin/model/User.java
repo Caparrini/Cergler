@@ -3,6 +3,8 @@ import java.io.File;
 import java.util.Date;
 import java.util.ArrayList;
 
+import p1admin.model.message.Message;
+
 public class User {
 	//Clase usuario de la aplicación
 	
@@ -32,6 +34,10 @@ public class User {
 	
 	private ArrayList<String> interests;
 	private ArrayList<User> friends;
+	
+	private ArrayList<Message> received;
+	private ArrayList<Message> sended;
+
 	
 	private File profileImage;
 
