@@ -86,7 +86,7 @@ public abstract class AbstractMapper<T,K> {
 	 */
 	 public boolean insert(Object[] values){
 		 DataAccessor da = new DataAccessor(ds);
-		 return da.insertRow(getTableName(), new String[] {getKeyColumnName()}, values); 
+		 return da.insertRow(getTableName(), getColumnNames(), values);
 	 }
 	
 }

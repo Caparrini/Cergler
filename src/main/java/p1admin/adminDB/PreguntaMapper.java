@@ -21,7 +21,7 @@ public class PreguntaMapper extends AbstractMapper<Pregunta,Integer>{
 
 	@Override
 	protected String[] getColumnNames() {
-		return new String[] {getKeyColumnName(), "content"};
+		return new String[] {"content"};
 	}
 
 	@Override
@@ -47,5 +47,6 @@ public class PreguntaMapper extends AbstractMapper<Pregunta,Integer>{
 		// TODO Auto-generated method stub
 		return false;
 	}
+
 
 }
