@@ -35,7 +35,7 @@ public class DBFacade implements GenericDBFacade<Pregunta, Opcion> {
 	@Override
 	public void insertQuestion(Pregunta question) {
 		System.out.println("Insertar pregunta en BD: " + question);
-		// TODO Implementar
+		// TODO Implementar Capa
 	}
 
 	/**
@@ -54,7 +54,7 @@ public class DBFacade implements GenericDBFacade<Pregunta, Opcion> {
 	@Override
 	public List<Pregunta> getAllQuestions() {
 		System.out.println("Obtener todas las preguntas de la BD");
-		// TODO Implementar
+		// TODO Implementar Capa
 		return new LinkedList<>();
 	}
 
@@ -76,7 +76,7 @@ public class DBFacade implements GenericDBFacade<Pregunta, Opcion> {
 	@Override
 	public List<Pregunta> findQuestionsContaining(String text) {
 		System.out.println("Búsqueda de preguntas que contienen: " + text);
-		// TODO implementar
+		// TODO implementar Capa
 		return new LinkedList<>();
 	}
 
@@ -98,7 +98,7 @@ public class DBFacade implements GenericDBFacade<Pregunta, Opcion> {
 	@Override
 	public void updateQuestion(Pregunta question) {
 		System.out.println("Actualizar pregunta: " + question);
-		// TODO Implementar
+		// TODO Implementar Capa
 	}
 
 	/**
@@ -119,7 +119,7 @@ public class DBFacade implements GenericDBFacade<Pregunta, Opcion> {
 	@Override
 	public void updateAnswer(Pregunta question, Opcion answer) {
 		System.out.println("Actualizar opción " + answer);
-		// TODO Implementar
+		// TODO Implementar Ergl
 
 	}
 
@@ -138,7 +138,7 @@ public class DBFacade implements GenericDBFacade<Pregunta, Opcion> {
 	@Override
 	public void deleteAnswer(Pregunta question, Opcion answer) {
 		System.out.println("Eliminar opción " + answer);
-		// TODO Implementar
+		// TODO Implementar Ergl
 	}
 
 	/**
@@ -157,7 +157,7 @@ public class DBFacade implements GenericDBFacade<Pregunta, Opcion> {
 	@Override
 	public void deleteQuestion(Pregunta question) {
 		System.out.println("Eliminar pregunta " + question);
-		// TODO Implementar
+		// TODO Implementar Ergl
 	}
 
 	/**
@@ -174,6 +174,6 @@ public class DBFacade implements GenericDBFacade<Pregunta, Opcion> {
 	@Override
 	public void insertAnswer(Pregunta question, Opcion answer) {
 		System.out.println("Insertar " + answer);
-		// TODO Implementar
+		// TODO Implementar Ergl
 	}
 }
