@@ -85,11 +85,10 @@ public class DataAccessor {
 	}
 	
 	public String generateInsertStatement(String tableName, String[] fields) {
-		String fieldList = String.join( ",",fields);
 		String[] marks = new String[fields.length];
 		Arrays.fill(marks, "?");
-		String markList = String.join(",",marks);
-		return "INSERT INTO " + tableName + " (" + fieldList + ") VALUES (" + markList + ")";
+        return "INSERT INTO " + tableName + " (" + String.join(", ", fields) + ")" +
+               " VALUES " + "( " + String.join(", ", marks) + ")";
 	}
 	
 	private String generateUpdateStatement(String tableName,
