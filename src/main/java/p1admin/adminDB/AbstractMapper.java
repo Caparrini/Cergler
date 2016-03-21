@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import javax.sql.DataSource;
 
 
-public abstract class AbstractMapper<T,K> {
+public abstract class AbstractMapper<T> {
 	
 	protected DataSource ds;
 
@@ -42,7 +42,7 @@ public abstract class AbstractMapper<T,K> {
 	 */
 	protected abstract T buildObjectFromResultSet(ResultSet rs) throws SQLException;
 
-	public T findById(K id){
+	public T findById(Object[] id){
 		String tableName = getTableName();
 		String[] columnNames = getColumnNames();
 		String keyColumnName = getKeyColumnName();
@@ -74,7 +74,7 @@ public abstract class AbstractMapper<T,K> {
 	}
 
 	 // ELIMINA UNA FILA EN LA TABLA CORRESPONDIENTE DE LA BASE DE DATOS
-	 public boolean delete(K[] id) {
+	 public boolean delete(Object[] id) {
 		 DataAccessor da = new DataAccessor(ds);
 		 return da.deleteRow(getTableName(), getKeyColumnName(), id); 
 	 }

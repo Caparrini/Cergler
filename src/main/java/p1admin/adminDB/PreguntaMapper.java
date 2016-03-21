@@ -7,7 +7,7 @@ import javax.sql.DataSource;
 
 import p1admin.model.Pregunta;
 
-public class PreguntaMapper extends AbstractMapper<Pregunta,Integer>{
+public class PreguntaMapper extends AbstractMapper<Pregunta>{
 
 	public PreguntaMapper(DataSource ds) {
 		super(ds);
