@@ -17,7 +17,6 @@ public class DataAccessor {
 
     public boolean deleteRow(String tableName, String[] keyColumnNames, Object[] keyValues) {
         String sql = generateDeleteStatement(tableName, keyColumnNames);
-        System.out.println(sql);
 
         try(Connection con = ds.getConnection();
             PreparedStatement pst = con.prepareStatement(sql)) {
@@ -38,7 +37,7 @@ public class DataAccessor {
                               Object[] keyValues, String[] columnNames, Object[] columnValues) {
 
         String sql = generateUpdateStatement(tableName, keyColumnNames,columnNames);
-        System.out.println(sql);
+
         try(Connection con = ds.getConnection();
             PreparedStatement pst = con.prepareStatement(sql)) {
 
