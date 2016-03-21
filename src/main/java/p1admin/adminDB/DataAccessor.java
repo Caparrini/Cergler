@@ -36,7 +36,7 @@ public class DataAccessor {
     public boolean updateRows(String tableName, String[] keyColumnNames,
                               Object[] keyValues, String[] columnNames, Object[] columnValues) {
 
-        String sql = generateUpdateStatement(tableName, keyColumnNames,columnNames);
+        String sql = generateUpdateStatement(tableName, keyColumnNames, columnNames);
 
         try(Connection con = ds.getConnection();
             PreparedStatement pst = con.prepareStatement(sql)) {
@@ -102,7 +102,7 @@ public class DataAccessor {
             keyColumnNames[i] = keyColumnNames[i].concat(" = ?");
 
         return "UPDATE " + tableName +
-               " SET " + String.join(" AND ", columnNames) +
+               " SET " + String.join(", ", columnNames) +
                " WHERE " + String.join(" AND ", keyColumnNames);
     }
 
