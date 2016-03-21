@@ -29,7 +29,7 @@ public abstract class AbstractMapper<T> {
 	/**
 	 * Devuelve un array de String con los nombres de las columnas clave de la tabla
 	 */
-	protected abstract String getKeyColumnName();
+	protected abstract String[] getKeyColumnNames();
 
 	 /**
 	  * Inserta un objeto en la base de datos (depende del mapper concreto.	
@@ -45,16 +45,21 @@ public abstract class AbstractMapper<T> {
 	public T findById(Object[] id){
 		String tableName = getTableName();
 		String[] columnNames = getColumnNames();
-		String keyColumnName = getKeyColumnName();
+
+		String[] keyColumnNames = getKeyColumnNames();
+		for (int i = 0; i < keyColumnNames.length; i++) {
+			keyColumnNames[i] = keyColumnNames[i].concat(" = ?");
+		}
 		
 		String sql = "SELECT " + String.join( ", ", columnNames) +
 				     " FROM " + tableName +
-				     " WHERE " + String.join(" AND ", keyColumnName + " = ?");
+				     " WHERE " + String.join(" AND ", keyColumnNames);
 		
 		try (Connection con = ds.getConnection();
 			PreparedStatement pst = con.prepareStatement(sql)) {
-
-			pst.setObject(1, id);
+			for (int i = 0; i < id.length; i++) {
+				pst.setObject(i + 1, id[i]);
+			}
 			try (ResultSet rs = pst.executeQuery()){
 				if (rs.next()) {
 					return buildObjectFromResultSet(rs);
@@ -63,25 +68,24 @@ public abstract class AbstractMapper<T> {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 		return null;
 	}
 
 	//Update database, uses DataAccesor
 	public boolean update(Object[] columnValues, Object[] keyValues) {
 		DataAccessor da = new DataAccessor(ds);
-		return da.updateRows(getTableName(), getKeyColumnName(), keyValues, getColumnNames(), columnValues);
+		return da.updateRows(getTableName(), getKeyColumnNames(), keyValues, getColumnNames(), columnValues);
 	}
 
 	 // ELIMINA UNA FILA EN LA TABLA CORRESPONDIENTE DE LA BASE DE DATOS
 	 public boolean delete(Object[] id) {
 		 DataAccessor da = new DataAccessor(ds);
-		 return da.deleteRow(getTableName(), getKeyColumnName(), id); 
+		 return da.deleteRow(getTableName(), getKeyColumnNames(), id);
 	 }
 	 
 	/**
 	 * Inserción general
-	 * @param id
+	 * @param values
 	 * @return
 	 */
 	 public boolean insert(Object[] values) {
