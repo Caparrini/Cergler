@@ -61,22 +61,21 @@ create table questions (
 );
 
 create table answers (
+    answerId int auto_increment primary key,
     questionId int not null,
     questionOrder int not null,
     content varchar(500) not null,
 
-    primary key (questionId, questionOrder),
     foreign key (questionId) references questions(id) on delete cascade
 );
 
 create table users_questions (
     userId varchar(250) not null,
     rating int not null,
-    questionId int not null,
-    questionOrder int not null,
+    answerId int not null,
 
     foreign key (userId) references users(email),
-    foreign key (questionId, questionOrder) references answers(questionId, questionOrder) on delete cascade
+    foreign key (answerId) references answers(answerId) on delete cascade
 );
 
 create table messages (

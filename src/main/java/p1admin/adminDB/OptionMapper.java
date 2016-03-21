@@ -5,7 +5,7 @@ import p1admin.model.Opcion;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.Arrays;
 
 public class OptionMapper extends AbstractMapper<Opcion> {
 
@@ -22,36 +22,50 @@ public class OptionMapper extends AbstractMapper<Opcion> {
 
     @Override
     protected String[] getColumnNames() {
-        return new String[] {"content"};
+        return new String[] {
+            "questionId",
+            "questionOrder",
+            "content"
+        };
     }
 
     @Override
     protected String[] getKeyColumnNames() {
-        return new String[] {"questionId", "questionOrder"};
+        return new String[] {"answerId"};
     }
 
     @Override
     public boolean insert(Opcion obInsert) {
-        return false;
+        return this.insert(new Object[] {
+            obInsert.getPreguntaMadre().getId(),
+            obInsert.getNumeroOrden(),
+            obInsert.getTexto()
+        });
     }
 
-    // FIXME
-    // We need to be able to change the questionOrder,
-    // we can either modify the primary key, or a call on update
-    // make a delete and then a create.
     @Override
-    public boolean insert(Object[] values) {
+    public boolean update(Object[] columnValues, Object[] keyValues) {
+        // We can't change the questionId of the answer,
+        // so we should strip that field from the columnNames value
+        // before constructing the query
         DataAccessor da = new DataAccessor(this.ds);
+        String[] columnNames = getColumnNames();
+        columnNames = Arrays.copyOfRange(columnNames, 1, columnNames.length);
 
-        List<String> columnNames = new ArrayList<>();
-        Collections.addAll(columnNames, getKeyColumnNames());
-        Collections.addAll(columnNames, getColumnNames());
-
-        return da.insertRow(getTableName(), columnNames.toArray(new String[3]), values);
+        return da.updateRows(getTableName(), getKeyColumnNames(),
+                             keyValues, columnNames, columnValues);
     }
 
     @Override
     protected Opcion buildObjectFromResultSet(ResultSet rs) throws SQLException {
-        return null;
+        // TODO: Should we fetch the question referenced by questionId, ie:
+        // op.setPreguntaMadre(PreguntaMapper.findById(
+        //     rs.getInt(rs.findColumn("questionId"))
+        // ));
+
+        Opcion op = new Opcion();
+        op.setNumeroOrden(rs.getInt(rs.findColumn("questionOrder")));
+        op.setTexto(rs.getString(rs.findColumn("content")));
+        return op;
     }
 }
