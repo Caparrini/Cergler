@@ -8,8 +8,6 @@ import java.sql.SQLException;
 import javax.sql.DataSource;
 
 
-
-
 public abstract class AbstractMapper<T,K> {
 	
 	protected DataSource ds;
@@ -17,7 +15,6 @@ public abstract class AbstractMapper<T,K> {
 	public AbstractMapper(DataSource ds) {
 		this.ds = ds;
 	}
-	
 
 	/**
 	 * Devuelve el nombre de la tabla correspondiente al mapper concreto
@@ -50,31 +47,34 @@ public abstract class AbstractMapper<T,K> {
 		String[] columnNames = getColumnNames();
 		String keyColumnName = getKeyColumnName();
 		
-		String sql= "SELECT " + String.join( ", ",columnNames) + " FROM " + tableName + " WHERE " + String.join(" AND ",keyColumnName + " = ?");
+		String sql = "SELECT " + String.join( ", ", columnNames) +
+				     " FROM " + tableName +
+				     " WHERE " + String.join(" AND ", keyColumnName + " = ?");
 		
 		try (Connection con = ds.getConnection();
 			PreparedStatement pst = con.prepareStatement(sql)) {
+
 			pst.setObject(1, id);
-			try(ResultSet rs = pst.executeQuery()){
-				if(rs.next()){
+			try (ResultSet rs = pst.executeQuery()){
+				if (rs.next()) {
 					return buildObjectFromResultSet(rs);
 				}
 			}		
-		}catch(SQLException e){
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+
 		return null;
 	}
-	//Update database , uses DataAccesor
-	public boolean update(Object[] columnValues, Object[] keyValues){
+
+	//Update database, uses DataAccesor
+	public boolean update(Object[] columnValues, Object[] keyValues) {
 		DataAccessor da = new DataAccessor(ds);
-		return da.updateRows(getTableName(),getKeyColumnName(),keyValues, getColumnNames(),columnValues);
+		return da.updateRows(getTableName(), getKeyColumnName(), keyValues, getColumnNames(), columnValues);
 	}
-	
 
-
-	//ELIMINA UNA FILA EN LA TABLA CORRESPONDIENTE DE LA BASE DE DATOS
-	 public boolean delete(K[] id){
+	 // ELIMINA UNA FILA EN LA TABLA CORRESPONDIENTE DE LA BASE DE DATOS
+	 public boolean delete(K[] id) {
 		 DataAccessor da = new DataAccessor(ds);
 		 return da.deleteRow(getTableName(), getKeyColumnName(), id); 
 	 }
@@ -84,9 +84,8 @@ public abstract class AbstractMapper<T,K> {
 	 * @param id
 	 * @return
 	 */
-	 public boolean insert(Object[] values){
+	 public boolean insert(Object[] values) {
 		 DataAccessor da = new DataAccessor(ds);
 		 return da.insertRow(getTableName(), getColumnNames(), values);
 	 }
-	
 }
