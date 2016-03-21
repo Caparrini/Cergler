@@ -62,8 +62,8 @@ create table questions (
 
 create table answers (
     questionId int not null,
-    content varchar(500) not null,
     questionOrder int not null,
+    content varchar(500) not null,
 
     primary key (questionId, questionOrder),
     foreign key (questionId) references questions(id) on delete cascade
