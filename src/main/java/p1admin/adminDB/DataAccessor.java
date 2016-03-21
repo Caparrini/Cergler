@@ -8,7 +8,6 @@ import java.util.Arrays;
 import javax.sql.DataSource;
 
 
-
 public class DataAccessor {
 	private DataSource ds;
 
@@ -17,14 +16,13 @@ public class DataAccessor {
 		this.ds = ds;
 	}
 	
-	public boolean deleteRow(String tableName, String keyColumnNames,
-			Object[] KeyValues) {
+	public boolean deleteRow(String tableName, String[] keyColumnNames, Object[] keyValues) {
 		String sql = generateDeleteStatement(tableName, keyColumnNames);
 		System.out.println(sql);
 		try(Connection con = ds.getConnection();
 				PreparedStatement pst = con.prepareStatement(sql)) {
-				for (int i = 0; i < KeyValues.length; i++) {
-					pst.setObject(i + 1, KeyValues[i]);
+				for (int i = 0; i < keyValues.length; i++) {
+					pst.setObject(i + 1, keyValues[i]);
 				}
 					int numRows = pst.executeUpdate();
 					return (numRows == 1);
@@ -36,11 +34,10 @@ public class DataAccessor {
 	
 
 
-	public boolean updateRows(String tableName, String keyColumnName,
-			Object[] keyValues,String[] columnNames,
-			Object[] columnValues) {
+	public boolean updateRows(String tableName, String[] keyColumnNames,
+                              Object[] keyValues, String[] columnNames, Object[] columnValues) {
 		
-		String sql = generateUpdateStatement(tableName, keyColumnName,columnNames);
+		String sql = generateUpdateStatement(tableName, keyColumnNames,columnNames);
 		System.out.println(sql);
 		try(Connection con = ds.getConnection();
 				PreparedStatement pst = con.prepareStatement(sql)) {
@@ -88,25 +85,31 @@ public class DataAccessor {
 	}
 	
 	public String generateInsertStatement(String tableName, String[] fields) {
-		String fieldList = String.join( ",",fields);
 		String[] marks = new String[fields.length];
 		Arrays.fill(marks, "?");
-		String markList = String.join(",",marks);
-		return "INSERT INTO " + tableName + " (" + fieldList + ") VALUES (" + markList + ")";
+        return "INSERT INTO " + tableName + " (" + String.join(", ", fields) + ")" +
+               " VALUES " + "( " + String.join(", ", marks) + ")";
 	}
 	
 	private String generateUpdateStatement(String tableName,
-			String keyColumnNames, String[] columnNames) {
-		String setList = String.join(" = ? AND ", columnNames);
-		String[] marks = new String[1];
-		Arrays.fill(marks, "?");
-		String markList = String.join(" = ",keyColumnNames);
-		return "UPDATE " + tableName + " SET " + setList + " = ?"  + " WHERE " + markList + " = ?";
+                                           String[] keyColumnNames, String[] columnNames) {
+
+        for (int i = 0; i < columnNames.length; i++)
+            columnNames[i] = columnNames[i].concat(" = ?");
+
+        for (int i = 0; i < keyColumnNames.length; i++)
+            keyColumnNames[i] = keyColumnNames[i].concat(" = ?");
+
+        return "UPDATE " + tableName +
+               " SET " + String.join(" AND ", columnNames) +
+               " WHERE " + String.join(" AND ", keyColumnNames);
 	}
 	
-	private String generateDeleteStatement(String tableName,
-			String keyColumnNames) {
-		return "DELETE FROM " + tableName + " WHERE " + keyColumnNames + " = ?";
+	private String generateDeleteStatement(String tableName, String[] keyColumnNames) {
+        for (int i = 0; i < keyColumnNames.length; i++) {
+            keyColumnNames[i] = keyColumnNames[i].concat(" = ?");
+        }
+        return "DELETE FROM " + tableName + " WHERE " + String.join(" AND ", keyColumnNames);
 	}
 
 }

@@ -7,7 +7,7 @@ import javax.sql.DataSource;
 
 import p1admin.model.Pregunta;
 
-public class PreguntaMapper extends AbstractMapper<Pregunta,Integer>{
+public class PreguntaMapper extends AbstractMapper<Pregunta>{
 
 	public PreguntaMapper(DataSource ds) {
 		super(ds);
@@ -25,16 +25,15 @@ public class PreguntaMapper extends AbstractMapper<Pregunta,Integer>{
 	}
 
 	@Override
-	protected String getKeyColumnName() {
-		
-		return "id";
+	protected String[] getKeyColumnNames() {
+		return new String[] {"id"};
 	}
 
 	@Override
 	protected Pregunta buildObjectFromResultSet(ResultSet rs)
 			throws SQLException {
 		//TODO
-		/*int qId = rs.getInt(getKeyColumnName());
+		/*int qId = rs.getInt(getKeyColumnNames());
 		String content = rs.getString("content");
 		
 		return new Pregunta(qId, content);
