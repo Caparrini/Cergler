@@ -1,26 +1,23 @@
 package p1admin.model;
 
 public class Coordinates {
-	
-	private float lat;
-	
-	private float lon;
 
-	public float getLat() {
-		return lat;
-	}
+    private float lat;
+    private float lon;
 
-	public void setLat(float lat) {
-		this.lat = lat;
-	}
+    public float getLat() {
+        return lat;
+    }
 
-	public float getLon() {
-		return lon;
-	}
+    public void setLat(float lat) {
+        this.lat = lat;
+    }
 
-	public void setLon(float lon) {
-		this.lon = lon;
-	}
-	
+    public float getLon() {
+        return lon;
+    }
 
+    public void setLon(float lon) {
+        this.lon = lon;
+    }
 }
