@@ -30,15 +30,22 @@ public class PreguntaMapper extends AbstractMapper<Pregunta>{
     }
 
     @Override
+    protected String getKeyColumnName() {
+        return "id";
+    }
+    @Override
     protected Pregunta buildObjectFromResultSet(ResultSet rs)
             throws SQLException {
         //TODO
-        /*int qId = rs.getInt(getKeyColumnNames());
+        int qId = rs.getInt(getKeyColumnName());
         String content = rs.getString("content");
+        
+        Pregunta p = new Pregunta();
+        p.setId(qId);
+        p.setEnunciado(content);
+        
 
-        return new Pregunta(qId, content);
-        */
-        return null;
+        return p;
     }
 
     @Override

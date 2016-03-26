@@ -1,7 +1,10 @@
 package p1admin.adminDB;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+
+import javax.sql.DataSource;
 
 import p1admin.model.Opcion;
 import p1admin.model.Pregunta;
@@ -17,9 +20,15 @@ import p1admin.model.Pregunta;
  */
 public class DBFacade implements GenericDBFacade<Pregunta, Opcion> {
     // TODO Introduce los atributos que sean necesarios.
+    private DataSource ds;
 
     // TODO Si es necesario, añade el constructor que inicialice esos atributos.
-
+    public DBFacade(DataSource ds) {
+		super();
+		this.ds = ds;
+	}
+    
+    
     /**
      * Inserta una pregunta en la base de datos.
      *
@@ -38,7 +47,9 @@ public class DBFacade implements GenericDBFacade<Pregunta, Opcion> {
         // TODO Implementar Capa
     }
 
-    /**
+
+
+	/**
      * Devuelve todas las preguntas de la base de datos.
      *
      * Esta función es llamada al principio del programa, para llenar el JList
@@ -55,7 +66,11 @@ public class DBFacade implements GenericDBFacade<Pregunta, Opcion> {
     public List<Pregunta> getAllQuestions() {
         System.out.println("Obtener todas las preguntas de la BD");
         // TODO Implementar Capa
-        return new LinkedList<>();
+        PreguntaMapper pm = new PreguntaMapper(ds);
+        LinkedList<Pregunta> res = new LinkedList<Pregunta>();
+        res.addAll(pm.selectAll());
+        
+        return res;
     }
 
     /**

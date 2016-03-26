@@ -3,6 +3,7 @@ package p1admin.adminDB;
 import p1admin.model.Opcion;
 
 import javax.sql.DataSource;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -68,4 +69,10 @@ public class OptionMapper extends AbstractMapper<Opcion> {
         op.setTexto(rs.getString(rs.findColumn("content")));
         return op;
     }
+
+	@Override
+	protected String getKeyColumnName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
