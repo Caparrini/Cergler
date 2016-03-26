@@ -21,11 +21,13 @@ import p1admin.model.Pregunta;
 public class DBFacade implements GenericDBFacade<Pregunta, Opcion> {
     // TODO Introduce los atributos que sean necesarios.
     private DataSource ds;
+    private PreguntaMapper pm;
 
     // TODO Si es necesario, añade el constructor que inicialice esos atributos.
     public DBFacade(DataSource ds) {
 		super();
 		this.ds = ds;
+		this.pm = new PreguntaMapper(ds);
 	}
     
     
@@ -44,7 +46,6 @@ public class DBFacade implements GenericDBFacade<Pregunta, Opcion> {
     @Override
     public void insertQuestion(Pregunta question) {
 
-        PreguntaMapper pm = new PreguntaMapper(ds);
         if(!pm.insert(question)){
             System.out.println("Problema al insertar pregunta en BD: " + question);
         }
@@ -68,9 +69,7 @@ public class DBFacade implements GenericDBFacade<Pregunta, Opcion> {
      */
     @Override
     public List<Pregunta> getAllQuestions() {
-        System.out.println("Obtener todas las preguntas de la BD");
-        // TODO Implementar Capa
-        PreguntaMapper pm = new PreguntaMapper(ds);
+
         LinkedList<Pregunta> res = new LinkedList<Pregunta>();
         res.addAll(pm.selectAll());
         
@@ -117,7 +116,6 @@ public class DBFacade implements GenericDBFacade<Pregunta, Opcion> {
     @Override
     public void updateQuestion(Pregunta question) {
 
-        PreguntaMapper pm = new PreguntaMapper(ds);
         pm.update(question);
     }
 
