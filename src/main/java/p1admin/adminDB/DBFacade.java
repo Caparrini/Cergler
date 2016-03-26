@@ -116,8 +116,9 @@ public class DBFacade implements GenericDBFacade<Pregunta, Opcion> {
      */
     @Override
     public void updateQuestion(Pregunta question) {
-        System.out.println("Actualizar pregunta: " + question);
-        // TODO Implementar Capa
+
+        PreguntaMapper pm = new PreguntaMapper(ds);
+        pm.update(question);
     }
 
     /**
