@@ -43,8 +43,12 @@ public class DBFacade implements GenericDBFacade<Pregunta, Opcion> {
      */
     @Override
     public void insertQuestion(Pregunta question) {
-        System.out.println("Insertar pregunta en BD: " + question);
-        // TODO Implementar Capa
+
+        PreguntaMapper pm = new PreguntaMapper(ds);
+        if(!pm.insert(question)){
+            System.out.println("Problema al insertar pregunta en BD: " + question);
+        }
+        
     }
 
 

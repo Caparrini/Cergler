@@ -96,7 +96,7 @@ public abstract class AbstractMapper<T> {
      }
      /**
       * Select All
-      * @return
+      * @return Lista de objetos de una tabla
       */
       public List<T> selectAll() {
           List<T> res = new LinkedList<T>();
