@@ -26,8 +26,8 @@ public class ConnectionTest {
         OptionMapper om = new OptionMapper(cpds);
         om.insert(new Object[] {1, 1, "This is a question"});
 
-        om.update(new Object[] {1, "Ok now watch this!"}, new Object[] {1});
-        System.out.println(om.findById(new Object[] {1}));
+        om.update(new Object[] {1, "Ok now watch this!"}, new Object[] {1, 1});
+        System.out.println(om.findById(new Object[] {1, 1}));
 
         pm.delete(new Object[] {1});
         cpds.close();
