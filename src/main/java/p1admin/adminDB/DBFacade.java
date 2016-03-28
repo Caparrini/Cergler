@@ -3,6 +3,8 @@ package p1admin.adminDB;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.sql.DataSource;
+
 import p1admin.model.Opcion;
 import p1admin.model.Pregunta;
 
@@ -17,9 +19,17 @@ import p1admin.model.Pregunta;
  */
 public class DBFacade implements GenericDBFacade<Pregunta, Opcion> {
     // TODO Introduce los atributos que sean necesarios.
+    private DataSource ds;
+    private PreguntaMapper pm;
 
     // TODO Si es necesario, añade el constructor que inicialice esos atributos.
-
+    public DBFacade(DataSource ds) {
+		super();
+		this.ds = ds;
+		this.pm = new PreguntaMapper(ds);
+	}
+    
+    
     /**
      * Inserta una pregunta en la base de datos.
      *
@@ -34,11 +44,16 @@ public class DBFacade implements GenericDBFacade<Pregunta, Opcion> {
      */
     @Override
     public void insertQuestion(Pregunta question) {
-        System.out.println("Insertar pregunta en BD: " + question);
-        // TODO Implementar Capa
+
+        if(!pm.insert(question)){
+            System.out.println("Problema al insertar pregunta en BD: " + question);
+        }
+        
     }
 
-    /**
+
+
+	/**
      * Devuelve todas las preguntas de la base de datos.
      *
      * Esta función es llamada al principio del programa, para llenar el JList
@@ -53,9 +68,11 @@ public class DBFacade implements GenericDBFacade<Pregunta, Opcion> {
      */
     @Override
     public List<Pregunta> getAllQuestions() {
-        System.out.println("Obtener todas las preguntas de la BD");
-        // TODO Implementar Capa
-        return new LinkedList<>();
+
+        LinkedList<Pregunta> res = new LinkedList<Pregunta>();
+        res.addAll(pm.selectAllWithOptions());
+        
+        return res;
     }
 
     /**
@@ -75,9 +92,11 @@ public class DBFacade implements GenericDBFacade<Pregunta, Opcion> {
      */
     @Override
     public List<Pregunta> findQuestionsContaining(String text) {
-        System.out.println("Búsqueda de preguntas que contienen: " + text);
-        // TODO implementar Capa
-        return new LinkedList<>();
+
+        LinkedList<Pregunta> res = new LinkedList<Pregunta>();
+        res.addAll(pm.selectAllWithOptions(text));
+        
+        return res;
     }
 
     /**
@@ -97,8 +116,8 @@ public class DBFacade implements GenericDBFacade<Pregunta, Opcion> {
      */
     @Override
     public void updateQuestion(Pregunta question) {
-        System.out.println("Actualizar pregunta: " + question);
-        // TODO Implementar Capa
+
+        pm.update(question);
     }
 
     /**

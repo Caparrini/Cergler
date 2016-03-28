@@ -3,6 +3,7 @@ package p1admin.adminDB;
 import p1admin.model.Opcion;
 
 import javax.sql.DataSource;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -65,7 +66,8 @@ public class OptionMapper extends AbstractMapper<Opcion> {
 
         Opcion op = new Opcion();
         op.setNumeroOrden(rs.getInt(rs.findColumn("questionOrder")));
-        op.setTexto(rs.getString(rs.findColumn("content")));
+        op.setTexto(rs.getString(rs.findColumn(this.getTableName()+".content")));
         return op;
     }
+
 }

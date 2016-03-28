@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.sql.DataSource;
 
@@ -91,4 +93,31 @@ public abstract class AbstractMapper<T> {
          DataAccessor da = new DataAccessor(ds);
          return da.insertRow(getTableName(), getColumnNames(), values);
      }
+     /**
+      * Select All
+      * @return Lista de objetos de una tabla
+      */
+      public List<T> selectAll() {
+          List<T> res = new LinkedList<T>();
+          String sql = "SELECT * FROM " + this.getTableName();
+
+
+          try (Connection con = ds.getConnection();
+              PreparedStatement pst = con.prepareStatement(sql)) {
+
+              ResultSet rs = pst.executeQuery();
+
+              while(rs.next()){
+                  res.add(this.buildObjectFromResultSet(rs));
+            	 }
+              
+          } catch (SQLException e) {
+              e.printStackTrace();
+              
+          }
+		return res;
+          
+
+      }
+
 }
