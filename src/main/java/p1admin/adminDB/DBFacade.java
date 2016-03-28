@@ -1,6 +1,5 @@
 package p1admin.adminDB;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -65,11 +64,7 @@ public class DBFacade implements GenericDBFacade<Pregunta, Opcion> {
      */
     @Override
     public List<Pregunta> getAllQuestions() {
-
-        LinkedList<Pregunta> res = new LinkedList<Pregunta>();
-        res.addAll(pm.selectAllWithOptions());
-        
-        return res;
+        return pm.selectAllWithOptions();
     }
 
     /**
@@ -89,11 +84,7 @@ public class DBFacade implements GenericDBFacade<Pregunta, Opcion> {
      */
     @Override
     public List<Pregunta> findQuestionsContaining(String text) {
-
-        LinkedList<Pregunta> res = new LinkedList<Pregunta>();
-        res.addAll(pm.selectAllWithOptions(text));
-        
-        return res;
+        return pm.selectAllWithOptions(text);
     }
 
     /**
