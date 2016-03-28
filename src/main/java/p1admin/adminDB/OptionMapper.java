@@ -70,9 +70,4 @@ public class OptionMapper extends AbstractMapper<Opcion> {
         return op;
     }
 
-	@Override
-	protected String getKeyColumnName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

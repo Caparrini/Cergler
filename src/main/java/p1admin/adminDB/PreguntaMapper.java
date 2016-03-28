@@ -34,15 +34,12 @@ public class PreguntaMapper extends AbstractMapper<Pregunta>{
         return new String[] {"id"};
     }
 
-    @Override
-    protected String getKeyColumnName() {
-        return "id";
-    }
+
     @Override
     protected Pregunta buildObjectFromResultSet(ResultSet rs)
             throws SQLException {
         //TODO
-        int qId = rs.getInt(getKeyColumnName());
+        int qId = rs.getInt(getKeyColumnNames()[0]);
         String content = rs.getString(getColumnNames()[0]);
         
         Pregunta p = new Pregunta();
@@ -86,7 +83,7 @@ public class PreguntaMapper extends AbstractMapper<Pregunta>{
          List<Pregunta> res = new LinkedList<Pregunta>();
          OptionMapper op = new OptionMapper(ds);
          String sql = "SELECT * FROM "+ this.getTableName() +" LEFT JOIN " + op.getTableName() + " ON " + this.getTableName()+"."
-        		 +getKeyColumnName()+" = "
+        		 +getKeyColumnNames()[0]+" = "
         		  + op.getTableName() + "." + op.getColumnNames()[0];
 
          //TODO
@@ -148,7 +145,7 @@ public class PreguntaMapper extends AbstractMapper<Pregunta>{
         List<Pregunta> res = new LinkedList<Pregunta>();
         OptionMapper op = new OptionMapper(ds);
         String sql = "SELECT * FROM "+ this.getTableName() +" LEFT JOIN "+ op.getTableName() + " ON " + 
-        this.getTableName()+"." + getKeyColumnName() + " = " + op.getTableName() + "."
+        this.getTableName()+"." + getKeyColumnNames()[0] + " = " + op.getTableName() + "."
         + op.getColumnNames()[0] + " WHERE "+
         this.getTableName()+"."+this.getColumnNames()[0]+" LIKE ?";
         String filter = "%"+text+"%";

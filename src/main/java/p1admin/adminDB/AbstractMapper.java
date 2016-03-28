@@ -120,5 +120,4 @@ public abstract class AbstractMapper<T> {
 
       }
 
-      protected abstract String getKeyColumnName();
 }
