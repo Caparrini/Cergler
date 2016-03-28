@@ -18,18 +18,15 @@ import p1admin.model.Pregunta;
  * 
  */
 public class DBFacade implements GenericDBFacade<Pregunta, Opcion> {
-    // TODO Introduce los atributos que sean necesarios.
-    private DataSource ds;
-    private PreguntaMapper pm;
 
-    // TODO Si es necesario, añade el constructor que inicialice esos atributos.
+    private PreguntaMapper pm;
+    private OptionMapper oMapper;
+
     public DBFacade(DataSource ds) {
-		super();
-		this.ds = ds;
-		this.pm = new PreguntaMapper(ds);
-	}
-    
-    
+        this.pm = new PreguntaMapper(ds);
+        this.oMapper = new OptionMapper(ds);
+    }
+
     /**
      * Inserta una pregunta en la base de datos.
      *
@@ -138,8 +135,14 @@ public class DBFacade implements GenericDBFacade<Pregunta, Opcion> {
     @Override
     public void updateAnswer(Pregunta question, Opcion answer) {
         System.out.println("Actualizar opción " + answer);
-        // TODO Implementar Ergl
 
+        this.oMapper.update(new Object[] {
+            answer.getNumeroOrden(),
+            answer.getTexto()
+        }, new Object[] {
+            question.getId(),
+            answer.getNumeroOrden()
+        });
     }
 
     /**
@@ -157,7 +160,10 @@ public class DBFacade implements GenericDBFacade<Pregunta, Opcion> {
     @Override
     public void deleteAnswer(Pregunta question, Opcion answer) {
         System.out.println("Eliminar opción " + answer);
-        // TODO Implementar Ergl
+        this.oMapper.delete(new Object[] {
+            question.getId(),
+            answer.getNumeroOrden()
+        });
     }
 
     /**
@@ -176,7 +182,9 @@ public class DBFacade implements GenericDBFacade<Pregunta, Opcion> {
     @Override
     public void deleteQuestion(Pregunta question) {
         System.out.println("Eliminar pregunta " + question);
-        // TODO Implementar Ergl
+        this.pm.delete(new Object[] {
+            question.getId()
+        });
     }
 
     /**
@@ -193,6 +201,6 @@ public class DBFacade implements GenericDBFacade<Pregunta, Opcion> {
     @Override
     public void insertAnswer(Pregunta question, Opcion answer) {
         System.out.println("Insertar " + answer);
-        // TODO Implementar Ergl
+        this.oMapper.insert(answer);
     }
 }

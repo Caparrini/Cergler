@@ -32,7 +32,10 @@ public class OptionMapper extends AbstractMapper<Opcion> {
 
     @Override
     protected String[] getKeyColumnNames() {
-        return new String[] {"answerId"};
+        return new String[] {
+            "questionId",
+            "questionOrder"
+        };
     }
 
     @Override
