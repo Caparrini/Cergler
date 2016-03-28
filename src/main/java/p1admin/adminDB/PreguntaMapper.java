@@ -55,11 +55,7 @@ public class PreguntaMapper extends AbstractMapper<Pregunta>{
         Object[] o = new Object[1];
         o[0] = obInsert.getEnunciado();
         
-        if(!this.insert(o)){
-            return false;
-        }
-        
-        return true;
+        return !this.insert(o);
     }
 
     /**
