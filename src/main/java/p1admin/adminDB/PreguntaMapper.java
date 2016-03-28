@@ -41,16 +41,13 @@ public class PreguntaMapper extends AbstractMapper<Pregunta>{
 
 
     @Override
-    protected Pregunta buildObjectFromResultSet(ResultSet rs)
-            throws SQLException {
-        //TODO
+    protected Pregunta buildObjectFromResultSet(ResultSet rs) throws SQLException {
         int qId = rs.getInt(getKeyColumnNames()[0]);
         String content = rs.getString(getColumnNames()[0]);
         
         Pregunta p = new Pregunta();
         p.setId(qId);
         p.setEnunciado(content);
-        
 
         return p;
     }
@@ -73,7 +70,6 @@ public class PreguntaMapper extends AbstractMapper<Pregunta>{
 		cv[0]=question.getEnunciado();
 		kv[0]=question.getId();
 		this.update(cv, kv);
-		
 	}
 
     /**
