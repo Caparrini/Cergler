@@ -85,7 +85,9 @@ public class PreguntaMapper extends AbstractMapper<Pregunta>{
      public List<Pregunta> selectAllWithOptions() {
          List<Pregunta> res = new LinkedList<Pregunta>();
          OptionMapper op = new OptionMapper(ds);
-         String sql = "SELECT * FROM "+ this.getTableName() +" LEFT JOIN answers ON " + this.getTableName()+".id = answers.questionId";
+         String sql = "SELECT * FROM "+ this.getTableName() +" LEFT JOIN " + op.getTableName() + " ON " + this.getTableName()+"."
+        		 +getKeyColumnName()+" = "
+        		  + op.getTableName() + "." + op.getColumnNames()[0];
 
          //TODO
          try (Connection con = ds.getConnection();
@@ -145,8 +147,9 @@ public class PreguntaMapper extends AbstractMapper<Pregunta>{
      public List<Pregunta> selectAllWithOptions(String text) {
         List<Pregunta> res = new LinkedList<Pregunta>();
         OptionMapper op = new OptionMapper(ds);
-        String sql = "SELECT * FROM "+ this.getTableName() +" LEFT JOIN answers ON " + 
-        this.getTableName()+".id = answers.questionId WHERE "+
+        String sql = "SELECT * FROM "+ this.getTableName() +" LEFT JOIN "+ op.getTableName() + " ON " + 
+        this.getTableName()+"." + getKeyColumnName() + " = " + op.getTableName() + "."
+        + op.getColumnNames()[0] + " WHERE "+
         this.getTableName()+"."+this.getColumnNames()[0]+" LIKE ?";
         String filter = "%"+text+"%";
         
