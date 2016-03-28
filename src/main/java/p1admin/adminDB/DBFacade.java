@@ -92,8 +92,7 @@ public class DBFacade implements GenericDBFacade<Pregunta, Opcion> {
      */
     @Override
     public List<Pregunta> findQuestionsContaining(String text) {
-        System.out.println("Búsqueda de preguntas que contienen: " + text);
-        // TODO implementar Capa
+
         LinkedList<Pregunta> res = new LinkedList<Pregunta>();
         res.addAll(pm.selectAllWithOptions(text));
         
