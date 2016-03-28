@@ -70,7 +70,7 @@ public class DBFacade implements GenericDBFacade<Pregunta, Opcion> {
     public List<Pregunta> getAllQuestions() {
 
         LinkedList<Pregunta> res = new LinkedList<Pregunta>();
-        res.addAll(pm.selectAll());
+        res.addAll(pm.selectAllWithOptions());
         
         return res;
     }
