@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -135,6 +136,70 @@ public class PreguntaMapper extends AbstractMapper<Pregunta>{
          
 
      }
+     
+     
+     /**
+      * Select All with the string passed as filter
+      * @param Text must content the question
+      * @return Lista de Preguntas de una tabla con sus respuestas
+      */
+     public List<Pregunta> selectAllWithOptions(String text) {
+        List<Pregunta> res = new LinkedList<Pregunta>();
+        OptionMapper op = new OptionMapper(ds);
+        String sql = "SELECT * FROM "+ this.getTableName() +" LEFT JOIN answers ON " + 
+        this.getTableName()+".id = answers.questionId WHERE "+
+        this.getTableName()+"."+this.getColumnNames()[0]+" LIKE ?";
+        String filter = "%"+text+"%";
+        
+        try (Connection con = ds.getConnection();	
+            PreparedStatement pst = con.prepareStatement(sql)) {
+        	pst.setObject(1, filter);
+            ResultSet rs = pst.executeQuery();
+            int lastId = -1;
+            int currentId = -1;
+            Pregunta p = new Pregunta();
+            Pregunta paux = new Pregunta();
+            Opcion o = new Opcion();
+
+
+
+            while(rs.next()){ //While exist another line
+           	 
+           	 paux=this.buildObjectFromResultSet(rs);		
+           	 o = op.buildObjectFromResultSet(rs);
+           	 
+           	 currentId = paux.getId();
+           	 
+
+           	 if(lastId!=currentId){//If id is !equal to last id is a new question
+           		 if(lastId!=-1){
+               		 res.add(p); //added pregunta
+           		 }
+           		 lastId = currentId;
+           		 
+           		 p=paux;
+
+           	 }//else (qId = lId then is another option for the last question
+
+           	 
+           	 if(o.getNumeroOrden()!=0){
+       			 p.addOpcion(o);	
+       		 }
+           	
+          	 }
+            
+            res.add(p);
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+            
+        }
+		return res;
+        
+       
+
+        
+	}
      
      
      
