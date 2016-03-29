@@ -7,6 +7,8 @@ import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class OptionMapper extends AbstractMapper<Opcion> {
 
@@ -58,6 +60,30 @@ public class OptionMapper extends AbstractMapper<Opcion> {
 
         return da.updateRows(getTableName(), getKeyColumnNames(),
                              keyValues, columnNames, columnValues);
+    }
+
+    @Override
+    public boolean delete(Object[] id) {
+        Integer questionId = (Integer) id[0];
+        Integer questionOrder = (Integer) id[1];
+
+        boolean res = super.delete(id);
+        List<Opcion> updated = this.selectAll()
+                                        .stream()
+                                        .filter(e -> e.getNumeroOrden() >= questionOrder)
+                                        .collect(Collectors.toList());
+
+        for (Opcion opt : updated) {
+            this.update(new Object[] {
+                opt.getNumeroOrden() - 1,
+                opt.getTexto()
+            }, new Object[] {
+                questionId,
+                opt.getNumeroOrden()
+            });
+        }
+
+        return res;
     }
 
     @Override
