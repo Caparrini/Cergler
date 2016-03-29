@@ -1,3 +1,6 @@
+database.properties
+grant.sql
+
 ### OSX ###
 .DS_Store
 .AppleDouble

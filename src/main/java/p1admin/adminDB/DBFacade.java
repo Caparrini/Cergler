@@ -1,6 +1,5 @@
 package p1admin.adminDB;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -41,14 +40,10 @@ public class DBFacade implements GenericDBFacade<Pregunta, Opcion> {
      */
     @Override
     public void insertQuestion(Pregunta question) {
-
-        if(!pm.insert(question)){
+        if (!pm.insert(question)){
             System.out.println("Problema al insertar pregunta en BD: " + question);
         }
-        
     }
-
-
 
 	/**
      * Devuelve todas las preguntas de la base de datos.
@@ -65,11 +60,7 @@ public class DBFacade implements GenericDBFacade<Pregunta, Opcion> {
      */
     @Override
     public List<Pregunta> getAllQuestions() {
-
-        LinkedList<Pregunta> res = new LinkedList<Pregunta>();
-        res.addAll(pm.selectAllWithOptions());
-        
-        return res;
+        return pm.selectAllWithOptions();
     }
 
     /**
@@ -89,11 +80,7 @@ public class DBFacade implements GenericDBFacade<Pregunta, Opcion> {
      */
     @Override
     public List<Pregunta> findQuestionsContaining(String text) {
-
-        LinkedList<Pregunta> res = new LinkedList<Pregunta>();
-        res.addAll(pm.selectAllWithOptions(text));
-        
-        return res;
+        return pm.selectAllWithOptions(text);
     }
 
     /**
@@ -113,7 +100,6 @@ public class DBFacade implements GenericDBFacade<Pregunta, Opcion> {
      */
     @Override
     public void updateQuestion(Pregunta question) {
-
         pm.update(question);
     }
 
@@ -201,6 +187,12 @@ public class DBFacade implements GenericDBFacade<Pregunta, Opcion> {
     @Override
     public void insertAnswer(Pregunta question, Opcion answer) {
         System.out.println("Insertar " + answer);
+        // FIXME UGLY HACK!!!
+        if (question.getId() == null) {
+            List<Pregunta> possible = findQuestionsContaining(question.getEnunciado());
+            question = possible.get(possible.size() - 1);
+            answer.setPreguntaMadre(question);
+        }
         this.oMapper.insert(answer);
     }
 }
