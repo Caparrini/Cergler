@@ -13,10 +13,12 @@ import p1admin.model.Pregunta;
 
 public class Main {
     public static void main(String[] args) {
+        DatabaseProperties props = new DatabaseProperties();
         ComboPooledDataSource cpds = new ComboPooledDataSource();
-        cpds.setJdbcUrl("jdbc:mysql://localhost/abd_test");
-        cpds.setUser("root");
-        cpds.setPassword("");
+
+        cpds.setJdbcUrl(props.getUrl());
+        cpds.setUser(props.getUser());
+        cpds.setPassword(props.getPass());
 
         cpds.setAcquireRetryAttempts(1);
         cpds.setAcquireRetryDelay(1);

@@ -11,12 +11,12 @@ import p1admin.model.Pregunta;
 public class ConnectionTest {
 
     public static void main(String[] args) {
-
-        // Inicialización del pool de conexiones
+        DatabaseProperties props = new DatabaseProperties();
         ComboPooledDataSource cpds = new ComboPooledDataSource();
-        cpds.setJdbcUrl("jdbc:mysql://localhost:8889/abd_test");
-        cpds.setUser("abd");
-        cpds.setPassword("");
+
+        cpds.setJdbcUrl(props.getUrl());
+        cpds.setUser(props.getUser());
+        cpds.setPassword(props.getPass());
 
         cpds.setAcquireRetryAttempts(1);
         cpds.setAcquireRetryDelay(1);
