@@ -187,6 +187,12 @@ public class DBFacade implements GenericDBFacade<Pregunta, Opcion> {
     @Override
     public void insertAnswer(Pregunta question, Opcion answer) {
         System.out.println("Insertar " + answer);
+        // FIXME UGLY HACK!!!
+        if (question.getId() == null) {
+            List<Pregunta> possible = findQuestionsContaining(question.getEnunciado());
+            question = possible.get(possible.size() - 1);
+            answer.setPreguntaMadre(question);
+        }
         this.oMapper.insert(answer);
     }
 }
