@@ -1,7 +1,6 @@
 -- Borja de Régil Basáñez
 -- Antonio Caparrini López
 
-drop table if exists coordinates;
 drop table if exists users;
 drop table if exists interests;
 
@@ -17,12 +16,6 @@ drop table if exists users_users;
 drop table if exists users_questions;
 drop table if exists users_messages;
 
-create table coordinates (
-    id int auto_increment primary key,
-    latitude decimal not null,
-    longitude decimal not null
-);
-
 create table users (
     email varchar(250) primary key,
     pass varchar(162) not null,
@@ -34,9 +27,8 @@ create table users (
     birthDate date,
     profileImage blob,
     description varchar(500),
-    coordinatesId int,
-
-    foreign key (coordinatesId) references coordinates(id) on delete set null
+    latitude decimal,
+    longitude decimal
 );
 
 create table interests (
