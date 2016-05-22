@@ -121,13 +121,7 @@ public class DBFacade implements GenericDBFacade<Pregunta, Opcion> {
     @Override
     public void updateAnswer(Pregunta question, Opcion answer) {
         System.out.println("Actualizar opción " + answer);
-        this.oMapper.update(new Object[] {
-            answer.getNumeroOrden(),
-            answer.getTexto()
-        }, new Object[] {
-            question.getId(),
-            answer.getNumeroOrden()
-        });
+        this.oMapper.update(answer);
     }
 
     /**

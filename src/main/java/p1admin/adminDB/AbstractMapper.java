@@ -36,9 +36,16 @@ public abstract class AbstractMapper<T> {
 
     protected abstract Object[] getObjectId(T obj);
 
+    protected abstract Object[] getColumnValues(T obj);
+
     public boolean insert(T obInsert) {
         DataAccessor da = new DataAccessor(ds);
         return da.insertRow(getTableName(), getColumnNames(), getObjectArray(obInsert));
+    }
+
+    public boolean update(T obj) {
+        DataAccessor da = new DataAccessor(ds);
+        return da.updateRows(getTableName(), getKeyColumnNames(), getObjectId(obj), getColumnNames(), getColumnValues(obj));
     }
 
     public boolean delete(T object) {
@@ -80,12 +87,6 @@ public abstract class AbstractMapper<T> {
             e.printStackTrace();
         }
         return null;
-    }
-
-    //Update database, uses DataAccesor
-    public boolean update(Object[] columnValues, Object[] keyValues) {
-        DataAccessor da = new DataAccessor(ds);
-        return da.updateRows(getTableName(), getKeyColumnNames(), keyValues, getColumnNames(), columnValues);
     }
 
      /**

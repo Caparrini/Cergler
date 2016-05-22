@@ -77,17 +77,12 @@ public class PreguntaMapper extends AbstractMapper<Pregunta> {
         };
     }
 
-    /**
-     * Actualiza el contenido de una pregunta, no las opciones
-     */
-	public void update(Pregunta question) {
-		Object[] cv = new Object[1];
-		Object[] kv = new Object[1];
-
-		cv[0]=question.getEnunciado();
-		kv[0]=question.getId();
-		this.update(cv, kv);
-	}
+    @Override
+    protected Object[] getColumnValues(Pregunta question) {
+        return new Object[] {
+            question.getEnunciado()
+        };
+    }
 
     /**
      * Select All
