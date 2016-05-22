@@ -97,11 +97,12 @@ public class OptionMapper extends AbstractMapper<Opcion> {
 
         boolean res = super.delete(option);
 
-        // Get all options with a higher question order
-        List<Opcion> updated = this.selectAll()
-                                   .stream()
-                                   .filter(e -> e.getNumeroOrden() > questionOrder)
-                                   .collect(Collectors.toList());
+        // Get all (local) options with a higher question order
+        List<Opcion> updated = option.getPreguntaMadre()
+                                     .getOpciones()
+                                     .stream()
+                                     .filter(e -> e.getNumeroOrden() > questionOrder)
+                                     .collect(Collectors.toList());
 
         for (Opcion opt : updated) {
             opt.setPreguntaMadre(option.getPreguntaMadre());
