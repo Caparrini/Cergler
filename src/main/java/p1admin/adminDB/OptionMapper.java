@@ -71,15 +71,17 @@ public class OptionMapper extends AbstractMapper<Opcion> {
     }
 
     @Override
-    public boolean delete(Object[] id) {
-        Integer questionId = (Integer) id[0];
-        Integer questionOrder = (Integer) id[1];
+    public boolean delete(Opcion option) {
+        int questionId = option.getPreguntaMadre().getId();
+        int questionOrder = option.getNumeroOrden();
 
-        boolean res = super.delete(id);
+        boolean res = super.delete(option);
+
+        // Get all options with a higher question order
         List<Opcion> updated = this.selectAll()
-                                        .stream()
-                                        .filter(e -> e.getNumeroOrden() >= questionOrder)
-                                        .collect(Collectors.toList());
+                                   .stream()
+                                   .filter(e -> e.getNumeroOrden() > questionOrder)
+                                   .collect(Collectors.toList());
 
         for (Opcion opt : updated) {
             this.update(new Object[] {

@@ -155,10 +155,11 @@ public class DBFacade implements GenericDBFacade<Pregunta, Opcion> {
             question = getLastMatching(question.getEnunciado());
         }
 
-        this.oMapper.delete(new Object[] {
-            question.getId(),
-            answer.getNumeroOrden()
-        });
+        if (answer.getPreguntaMadre() == null) {
+            answer.setPreguntaMadre(question);
+        }
+
+        this.oMapper.delete(answer);
     }
 
     /**
@@ -182,9 +183,7 @@ public class DBFacade implements GenericDBFacade<Pregunta, Opcion> {
             question = getLastMatching(question.getEnunciado());
         }
 
-        this.pm.delete(new Object[] {
-            question.getId()
-        });
+        this.pm.delete(question);
     }
 
     /**

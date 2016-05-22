@@ -41,9 +41,9 @@ public abstract class AbstractMapper<T> {
         return da.insertRow(getTableName(), getColumnNames(), getObjectArray(obInsert));
     }
 
-    public boolean delete(Object[] id) {
+    public boolean delete(T object) {
         DataAccessor da = new DataAccessor(ds);
-        return da.deleteRow(getTableName(), getKeyColumnNames(), id);
+        return da.deleteRow(getTableName(), getKeyColumnNames(), getObjectId(object));
     }
 
     /**
