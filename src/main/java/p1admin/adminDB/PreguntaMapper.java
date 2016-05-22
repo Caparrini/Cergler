@@ -53,11 +53,10 @@ public class PreguntaMapper extends AbstractMapper<Pregunta>{
     }
 
     @Override
-    public boolean insert(Pregunta obInsert) {
-        Object[] o = new Object[1];
-        o[0] = obInsert.getEnunciado();
-        
-        return this.insert(o);
+    protected Object[] getObjectArray(Pregunta obj) {
+        return new Object[] {
+            obj.getEnunciado()
+        };
     }
 
     /**

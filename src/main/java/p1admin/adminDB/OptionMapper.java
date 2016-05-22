@@ -41,12 +41,12 @@ public class OptionMapper extends AbstractMapper<Opcion> {
     }
 
     @Override
-    public boolean insert(Opcion obInsert) {
-        return this.insert(new Object[] {
-            obInsert.getPreguntaMadre().getId(),
-            obInsert.getNumeroOrden(),
-            obInsert.getTexto()
-        });
+    protected Object[] getObjectArray(Opcion obj) {
+        return new Object[] {
+            obj.getPreguntaMadre().getId(),
+            obj.getNumeroOrden(),
+            obj.getTexto()
+        };
     }
 
     @Override

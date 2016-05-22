@@ -32,10 +32,16 @@ public abstract class AbstractMapper<T> {
      */
     protected abstract String[] getKeyColumnNames();
 
+    protected abstract Object[] getObjectArray(T obj);
+
      /**
       * Inserta un objeto en la base de datos (depende del mapper concreto.
       */
-    public abstract boolean insert(T obInsert);
+    public boolean insert(T obInsert) {
+        DataAccessor da = new DataAccessor(ds);
+        return da.insertRow(getTableName(), getColumnNames(), getObjectArray(obInsert));
+    }
+
     /**
      * Construye un objeto mapeado a partir del ResultSet pasado como parámetro.
      * Esta función es la que establece la correspondencia desde el mundo
@@ -84,15 +90,6 @@ public abstract class AbstractMapper<T> {
          return da.deleteRow(getTableName(), getKeyColumnNames(), id);
      }
 
-    /**
-     * Inserción general
-     * @param values
-     * @return
-     */
-     public boolean insert(Object[] values) {
-         DataAccessor da = new DataAccessor(ds);
-         return da.insertRow(getTableName(), getColumnNames(), values);
-     }
      /**
       * Select All
       * @return Lista de objetos de una tabla
