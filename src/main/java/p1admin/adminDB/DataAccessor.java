@@ -1,8 +1,6 @@
 package p1admin.adminDB;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Arrays;
 
 import javax.sql.DataSource;
@@ -83,6 +81,31 @@ public class DataAccessor {
             e.printStackTrace();
             return false;
         }
+    }
+
+    // Same as insertRow, but returns the generated keys
+    Integer insertAndReturn(String tableName, String[] fields, Object[] values) {
+        String sql = generateInsertStatement(tableName, fields);
+
+        try (Connection con = ds.getConnection();
+             PreparedStatement pst = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            for (int i = 0; i < values.length; i++) {
+                pst.setObject(i + 1, values[i]);
+            }
+
+            if (pst.executeUpdate() == 1) {
+                ResultSet rs =  pst.getGeneratedKeys();
+                if (rs.next()) {
+                    Integer i = rs.getInt(1);
+                    return i;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     public String generateInsertStatement(String tableName, String[] fields) {

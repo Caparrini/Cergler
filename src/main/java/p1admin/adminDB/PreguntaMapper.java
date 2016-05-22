@@ -5,17 +5,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import javax.sql.DataSource;
 
 import p1admin.model.Opcion;
 import p1admin.model.Pregunta;
 
-public class PreguntaMapper extends AbstractMapper<Pregunta>{
+public class PreguntaMapper extends AbstractMapper<Pregunta> {
 
     private OptionMapper optionMapper;
 
@@ -39,6 +36,20 @@ public class PreguntaMapper extends AbstractMapper<Pregunta>{
         return new String[] {"id"};
     }
 
+    @Override
+    public boolean insert(Pregunta obInsert) {
+        DataAccessor da = new DataAccessor(ds);
+        Integer id = da.insertAndReturn(getTableName(),
+                                          getColumnNames(),
+                                          getObjectArray(obInsert));
+
+        if (id != null) {
+            obInsert.setId(id);
+            return true;
+        }
+
+        return false;
+    }
 
     @Override
     protected Pregunta buildObjectFromResultSet(ResultSet rs) throws SQLException {
