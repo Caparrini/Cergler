@@ -97,8 +97,7 @@ public class DataAccessor {
             if (pst.executeUpdate() == 1) {
                 ResultSet rs =  pst.getGeneratedKeys();
                 if (rs.next()) {
-                    Integer i = rs.getInt(1);
-                    return i;
+                    return rs.getInt(1);
                 }
             }
         } catch (SQLException e) {
