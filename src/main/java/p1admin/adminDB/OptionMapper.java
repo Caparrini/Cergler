@@ -50,6 +50,14 @@ public class OptionMapper extends AbstractMapper<Opcion> {
     }
 
     @Override
+    protected Object[] getObjectId(Opcion obj) {
+        return new Object[] {
+            obj.getPreguntaMadre().getId(),
+            obj.getNumeroOrden()
+        };
+    }
+
+    @Override
     public boolean update(Object[] columnValues, Object[] keyValues) {
         // We can't change the questionId of the answer,
         // so we should strip that field from the columnNames value

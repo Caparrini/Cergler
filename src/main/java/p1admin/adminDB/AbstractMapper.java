@@ -34,12 +34,16 @@ public abstract class AbstractMapper<T> {
 
     protected abstract Object[] getObjectArray(T obj);
 
-     /**
-      * Inserta un objeto en la base de datos (depende del mapper concreto.
-      */
+    protected abstract Object[] getObjectId(T obj);
+
     public boolean insert(T obInsert) {
         DataAccessor da = new DataAccessor(ds);
         return da.insertRow(getTableName(), getColumnNames(), getObjectArray(obInsert));
+    }
+
+    public boolean delete(Object[] id) {
+        DataAccessor da = new DataAccessor(ds);
+        return da.deleteRow(getTableName(), getKeyColumnNames(), id);
     }
 
     /**
@@ -83,12 +87,6 @@ public abstract class AbstractMapper<T> {
         DataAccessor da = new DataAccessor(ds);
         return da.updateRows(getTableName(), getKeyColumnNames(), keyValues, getColumnNames(), columnValues);
     }
-
-     // ELIMINA UNA FILA EN LA TABLA CORRESPONDIENTE DE LA BASE DE DATOS
-     public boolean delete(Object[] id) {
-         DataAccessor da = new DataAccessor(ds);
-         return da.deleteRow(getTableName(), getKeyColumnNames(), id);
-     }
 
      /**
       * Select All

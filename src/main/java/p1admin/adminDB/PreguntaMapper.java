@@ -59,6 +59,13 @@ public class PreguntaMapper extends AbstractMapper<Pregunta>{
         };
     }
 
+    @Override
+    protected Object[] getObjectId(Pregunta obj) {
+        return new Object[] {
+            obj.getId()
+        };
+    }
+
     /**
      * Actualiza el contenido de una pregunta, no las opciones
      */
