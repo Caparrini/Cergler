@@ -1,5 +1,6 @@
 database.properties
 grant.sql
+src/test/resources
 
 ### OSX ###
 .DS_Store

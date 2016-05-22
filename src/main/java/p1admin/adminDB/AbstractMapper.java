@@ -32,10 +32,27 @@ public abstract class AbstractMapper<T> {
      */
     protected abstract String[] getKeyColumnNames();
 
-     /**
-      * Inserta un objeto en la base de datos (depende del mapper concreto.
-      */
-    public abstract boolean insert(T obInsert);
+    protected abstract Object[] getObjectArray(T obj);
+
+    protected abstract Object[] getObjectId(T obj);
+
+    protected abstract Object[] getColumnValues(T obj);
+
+    public boolean insert(T obInsert) {
+        DataAccessor da = new DataAccessor(ds);
+        return da.insertRow(getTableName(), getColumnNames(), getObjectArray(obInsert));
+    }
+
+    public boolean update(T obj) {
+        DataAccessor da = new DataAccessor(ds);
+        return da.updateRows(getTableName(), getKeyColumnNames(), getObjectId(obj), getColumnNames(), getColumnValues(obj));
+    }
+
+    public boolean delete(T object) {
+        DataAccessor da = new DataAccessor(ds);
+        return da.deleteRow(getTableName(), getKeyColumnNames(), getObjectId(object));
+    }
+
     /**
      * Construye un objeto mapeado a partir del ResultSet pasado como parámetro.
      * Esta función es la que establece la correspondencia desde el mundo
@@ -72,52 +89,25 @@ public abstract class AbstractMapper<T> {
         return null;
     }
 
-    //Update database, uses DataAccesor
-    public boolean update(Object[] columnValues, Object[] keyValues) {
-        DataAccessor da = new DataAccessor(ds);
-        return da.updateRows(getTableName(), getKeyColumnNames(), keyValues, getColumnNames(), columnValues);
-    }
-
-     // ELIMINA UNA FILA EN LA TABLA CORRESPONDIENTE DE LA BASE DE DATOS
-     public boolean delete(Object[] id) {
-         DataAccessor da = new DataAccessor(ds);
-         return da.deleteRow(getTableName(), getKeyColumnNames(), id);
-     }
-
-    /**
-     * Inserción general
-     * @param values
-     * @return
-     */
-     public boolean insert(Object[] values) {
-         DataAccessor da = new DataAccessor(ds);
-         return da.insertRow(getTableName(), getColumnNames(), values);
-     }
      /**
       * Select All
       * @return Lista de objetos de una tabla
       */
-      public List<T> selectAll() {
-          List<T> res = new LinkedList<T>();
-          String sql = "SELECT * FROM " + this.getTableName();
+    public List<T> selectAll() {
+        List<T> res = new LinkedList<T>();
+        String sql = "SELECT * FROM " + this.getTableName();
 
+        try (Connection con = ds.getConnection();
+            PreparedStatement pst = con.prepareStatement(sql)) {
 
-          try (Connection con = ds.getConnection();
-              PreparedStatement pst = con.prepareStatement(sql)) {
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                res.add(this.buildObjectFromResultSet(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
-              ResultSet rs = pst.executeQuery();
-
-              while(rs.next()){
-                  res.add(this.buildObjectFromResultSet(rs));
-            	 }
-              
-          } catch (SQLException e) {
-              e.printStackTrace();
-              
-          }
-		return res;
-          
-
-      }
-
+        return res;
+    }
 }

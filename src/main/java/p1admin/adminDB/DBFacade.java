@@ -121,18 +121,7 @@ public class DBFacade implements GenericDBFacade<Pregunta, Opcion> {
     @Override
     public void updateAnswer(Pregunta question, Opcion answer) {
         System.out.println("Actualizar opción " + answer);
-
-        if (question.getId() == null) {
-            question = getLastMatching(question.getEnunciado());
-        }
-
-        this.oMapper.update(new Object[] {
-            answer.getNumeroOrden(),
-            answer.getTexto()
-        }, new Object[] {
-            question.getId(),
-            answer.getNumeroOrden()
-        });
+        this.oMapper.update(answer);
     }
 
     /**
@@ -150,15 +139,10 @@ public class DBFacade implements GenericDBFacade<Pregunta, Opcion> {
     @Override
     public void deleteAnswer(Pregunta question, Opcion answer) {
         System.out.println("Eliminar opción " + answer);
-
-        if (question.getId() == null) {
-            question = getLastMatching(question.getEnunciado());
+        if (answer.getPreguntaMadre() == null) {
+            answer.setPreguntaMadre(question);
         }
-
-        this.oMapper.delete(new Object[] {
-            question.getId(),
-            answer.getNumeroOrden()
-        });
+        this.oMapper.delete(answer);
     }
 
     /**
@@ -177,14 +161,7 @@ public class DBFacade implements GenericDBFacade<Pregunta, Opcion> {
     @Override
     public void deleteQuestion(Pregunta question) {
         System.out.println("Eliminar pregunta " + question);
-
-        if (question.getId() == null) {
-            question = getLastMatching(question.getEnunciado());
-        }
-
-        this.pm.delete(new Object[] {
-            question.getId()
-        });
+        this.pm.delete(question);
     }
 
     /**
@@ -201,16 +178,6 @@ public class DBFacade implements GenericDBFacade<Pregunta, Opcion> {
     @Override
     public void insertAnswer(Pregunta question, Opcion answer) {
         System.out.println("Insertar " + answer);
-
-        if (question.getId() == null) {
-            answer.setPreguntaMadre(getLastMatching(question.getEnunciado()));
-        }
-
         this.oMapper.insert(answer);
-    }
-
-    private Pregunta getLastMatching(String text) {
-        List<Pregunta> candidates = findQuestionsContaining(text);
-        return candidates.get(candidates.size() - 1);
     }
 }

@@ -41,46 +41,72 @@ public class OptionMapper extends AbstractMapper<Opcion> {
     }
 
     @Override
-    public boolean insert(Opcion obInsert) {
-        return this.insert(new Object[] {
-            obInsert.getPreguntaMadre().getId(),
-            obInsert.getNumeroOrden(),
-            obInsert.getTexto()
-        });
+    protected Object[] getObjectArray(Opcion obj) {
+        return new Object[] {
+            obj.getPreguntaMadre().getId(),
+            obj.getNumeroOrden(),
+            obj.getTexto()
+        };
     }
 
     @Override
-    public boolean update(Object[] columnValues, Object[] keyValues) {
+    protected Object[] getObjectId(Opcion obj) {
+        return new Object[] {
+            obj.getPreguntaMadre().getId(),
+            obj.getNumeroOrden()
+        };
+    }
+
+    @Override
+    protected Object[] getColumnValues(Opcion obj) {
+        return new Object[] {
+            obj.getNumeroOrden(),
+            obj.getTexto()
+        };
+    }
+
+    @Override
+    // Overridden since we have to strip the questionId from the query
+    public boolean update(Opcion obj) {
+        return update(getColumnValues(obj), getObjectId(obj));
+    }
+
+    private boolean update(Object[] columnValues, Object[] keyValues) {
         // We can't change the questionId of the answer,
         // so we should strip that field from the columnNames value
         // before constructing the query
+
         DataAccessor da = new DataAccessor(this.ds);
         String[] columnNames = getColumnNames();
         columnNames = Arrays.copyOfRange(columnNames, 1, columnNames.length);
 
         return da.updateRows(getTableName(), getKeyColumnNames(),
                              keyValues, columnNames, columnValues);
+
+    }
+
+    private void moveAnswer(Opcion answer, int newPosition) {
+        Object[] columnValues = getColumnValues(answer);
+        columnValues[0] = newPosition;
+        update(columnValues, getObjectId(answer));
     }
 
     @Override
-    public boolean delete(Object[] id) {
-        Integer questionId = (Integer) id[0];
-        Integer questionOrder = (Integer) id[1];
+    public boolean delete(Opcion option) {
+        int questionOrder = option.getNumeroOrden();
 
-        boolean res = super.delete(id);
-        List<Opcion> updated = this.selectAll()
-                                        .stream()
-                                        .filter(e -> e.getNumeroOrden() >= questionOrder)
-                                        .collect(Collectors.toList());
+        boolean res = super.delete(option);
+
+        // Get all (local) options with a higher question order
+        List<Opcion> updated = option.getPreguntaMadre()
+                                     .getOpciones()
+                                     .stream()
+                                     .filter(e -> e.getNumeroOrden() > questionOrder)
+                                     .collect(Collectors.toList());
 
         for (Opcion opt : updated) {
-            this.update(new Object[] {
-                opt.getNumeroOrden() - 1,
-                opt.getTexto()
-            }, new Object[] {
-                questionId,
-                opt.getNumeroOrden()
-            });
+            opt.setPreguntaMadre(option.getPreguntaMadre());
+            moveAnswer(opt, opt.getNumeroOrden() - 1);
         }
 
         return res;
@@ -88,11 +114,6 @@ public class OptionMapper extends AbstractMapper<Opcion> {
 
     @Override
     protected Opcion buildObjectFromResultSet(ResultSet rs) throws SQLException {
-        // TODO: Should we fetch the question referenced by questionId, ie:
-        // op.setPreguntaMadre(PreguntaMapper.findById(
-        //     rs.getInt(rs.findColumn("questionId"))
-        // ));
-
         Opcion op = new Opcion();
         op.setNumeroOrden(rs.getInt(rs.findColumn("questionOrder")));
         op.setTexto(rs.getString(rs.findColumn(this.getTableName()+".content")));
