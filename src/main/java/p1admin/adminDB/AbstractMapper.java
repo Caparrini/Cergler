@@ -93,27 +93,21 @@ public abstract class AbstractMapper<T> {
       * Select All
       * @return Lista de objetos de una tabla
       */
-      public List<T> selectAll() {
-          List<T> res = new LinkedList<T>();
-          String sql = "SELECT * FROM " + this.getTableName();
+    public List<T> selectAll() {
+        List<T> res = new LinkedList<T>();
+        String sql = "SELECT * FROM " + this.getTableName();
 
+        try (Connection con = ds.getConnection();
+            PreparedStatement pst = con.prepareStatement(sql)) {
 
-          try (Connection con = ds.getConnection();
-              PreparedStatement pst = con.prepareStatement(sql)) {
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                res.add(this.buildObjectFromResultSet(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
-              ResultSet rs = pst.executeQuery();
-
-              while(rs.next()){
-                  res.add(this.buildObjectFromResultSet(rs));
-            	 }
-              
-          } catch (SQLException e) {
-              e.printStackTrace();
-              
-          }
-		return res;
-          
-
-      }
-
+        return res;
+    }
 }
