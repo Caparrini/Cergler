@@ -139,6 +139,9 @@ public class DBFacade implements GenericDBFacade<Pregunta, Opcion> {
     @Override
     public void deleteAnswer(Pregunta question, Opcion answer) {
         System.out.println("Eliminar opción " + answer);
+        if (answer.getPreguntaMadre() == null) {
+            answer.setPreguntaMadre(question);
+        }
         this.oMapper.delete(answer);
     }
 
